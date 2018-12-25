@@ -18,7 +18,11 @@
 
 namespace evdevPlus {
 
-    extern const std::unordered_map<std::string, int> KeyStringTable;
+    extern const std::unordered_map<std::string, int> Table_FunctionKeys;
+    extern const std::unordered_map<char, int> Table_LowerKeys;
+    extern const std::unordered_map<char, int> Table_UpperKeys;
+    extern const std::unordered_map<std::string, int> Table_KeyCodes;
+
 
     class EventDeviceID {
     public:
