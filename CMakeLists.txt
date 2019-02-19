@@ -35,6 +35,7 @@ set_target_properties(evdevPlus_Static PROPERTIES OUTPUT_NAME evdevPlus)
 add_executable(evdevPlus_test test.cpp)
 target_link_libraries(evdevPlus_test evdevPlus)
 
+configure_file(evdevPlus.pc.in evdevPlus.pc @ONLY)
 install(TARGETS evdevPlus
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
@@ -42,3 +43,4 @@ install(TARGETS evdevPlus_Static
         DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 install(FILES evdevPlus.hpp InputEvent.hpp CommonIncludes.hpp DESTINATION include/evdevPlus/)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/evdevPlus.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/)
