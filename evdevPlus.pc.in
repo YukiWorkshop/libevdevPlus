@@ -5,6 +5,6 @@ libdir= ${prefix}/@CMAKE_INSTALL_LIBDIR@
 
 Name: evdevPlus
 Description: Easy-to-use event device library in C++
-Version: 0.1.0
+Version: @PROJECT_VERSION@
 Cflags: -I${includedir}/evdevPlus
 Libs: -L${libdir} -levdevPlus
