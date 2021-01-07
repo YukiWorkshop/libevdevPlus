@@ -1,6 +1,6 @@
 /*
     This file is part of libevdevPlus.
-    Copyright (C) 2018 YukiWorkshop
+    Copyright (C) 2018-2021 Reimu NotMoe <reimu@sudomaker.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the MIT License.
@@ -10,8 +10,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef LIBEVDEVPLUS_HPP
-#define LIBEVDEVPLUS_HPP
+#pragma once
 
 #include "CommonIncludes.hpp"
 #include "InputEvent.hpp"
@@ -65,49 +64,52 @@ namespace evdevPlus {
 
 
 	class EventDevice {
-	public:
-		int FD = -1;
-		std::string Path;
+	private:
+		int fd_ = -1;
+		std::string path_;
 
 		int DriverVersion = -1;
 		EventDeviceID DeviceID;
 		std::string DeviceName;
 		std::set<int> EventTypes;
 
+		void __open(const std::string &path, int open_flags = O_RDONLY);
+		void __init();
+		void __close();
+	public:
+
 		EventDevice() = default;
+
 		EventDevice(const std::string &path, int open_flags = O_RDONLY) {
-			Open(path, open_flags);
+			__open(path, open_flags);
+			__init();
 		}
-		EventDevice(int fd) {
-			Open(fd);
-		}
+
 		~EventDevice() {
-			Close();
+			__close();
 		}
 
-		void Open(const std::string &path, int open_flags = O_RDONLY);
-		void Open(int fd);
-		void Close();
+		int driver_version() const noexcept {
+			return DriverVersion;
+		}
 
-		void Init();
+		const EventDeviceID& device_id() const noexcept {
+			return DeviceID;
+		}
 
-		void Grab();
-		void Ungrab();
+		const std::string& device_name() const noexcept {
+			return DeviceName;
+		}
 
-		InputEvent Read();
+		void grab();
+		void ungrab();
 
-		static bool IsValidDevice(int fd);
-		bool IsValidDevice();
-
+		InputEvent read();
 
 		bool const operator== (const EventDevice &o) const {
-			return (Path == o.Path) && (FD == o.FD);
+			return (path_ == o.path_) && (fd_ == o.fd_);
 		}
 
 	};
 }
-
-
-#endif //LIBEVDEVPLUS_HPP
-
 
