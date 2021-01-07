@@ -57,7 +57,7 @@ namespace evdevPlus {
 		}
 
 		EventDeviceID(const EventDeviceID &other) {
-			memcpy(&inputId, &(other.inputId), sizeof(uinput_setup));
+			memcpy(&inputId, &(other.inputId), sizeof(input_id));
 		}
 
 	};
