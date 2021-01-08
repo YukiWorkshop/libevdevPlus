@@ -89,6 +89,10 @@ namespace evdevPlus {
 			__close();
 		}
 
+		int fd() const noexcept {
+			return fd_;
+		}
+
 		int driver_version() const noexcept {
 			return DriverVersion;
 		}
