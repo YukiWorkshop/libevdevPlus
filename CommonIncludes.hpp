@@ -1,6 +1,6 @@
 /*
     This file is part of libevdevPlus.
-    Copyright (C) 2018 YukiWorkshop
+    Copyright (C) 2018-2021 Reimu NotMoe <reimu@sudomaker.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the MIT License.
@@ -10,8 +10,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef LIBEVDEVPLUS_COMMONINCLUDES_HPP
-#define LIBEVDEVPLUS_COMMONINCLUDES_HPP
+#pragma once
 
 #include <set>
 #include <unordered_set>
@@ -24,6 +23,7 @@
 #include <initializer_list>
 
 #include <cmath>
+#include <ctime>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -31,9 +31,7 @@
 
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/time.h>
 
-#include <linux/uinput.h>
+#include <linux/input.h>
+#include <linux/input-event-codes.h>
 
-
-#endif //LIBEVDEVPLUS_COMMONINCLUDES_HPP

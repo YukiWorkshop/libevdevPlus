@@ -1,6 +1,6 @@
 /*
     This file is part of libevdevPlus.
-    Copyright (C) 2018 YukiWorkshop
+    Copyright (C) 2018-2021 Reimu NotMoe <reimu@sudomaker.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the MIT License.
@@ -10,7 +10,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include "evdevPlus.hpp"
+#include <evdevPlus.hpp>
 
 using namespace evdevPlus;
 
@@ -22,17 +22,17 @@ int main(int argc, char **argv) {
 
 	EventDevice ev(argv[1]);
 
-	std::cout << "Device name: " << ev.DeviceName << "\n";
-	std::cout << "Bus type: " << ev.DeviceID.BusType << "\n";
-	std::cout << "VID: " << ev.DeviceID.Vendor << "\n";
-	std::cout << "PID: " << ev.DeviceID.Product << "\n";
-	std::cout << "Version: " << ev.DeviceID.Version << "\n";
-	std::cout << "Driver version: " << ev.DriverVersion << "\n";
+	std::cout << "Device name: " << ev.device_name() << "\n";
+	std::cout << "Bus type: " << ev.device_id().BusType << "\n";
+	std::cout << "VID: " << ev.device_id().Vendor << "\n";
+	std::cout << "PID: " << ev.device_id().Product << "\n";
+	std::cout << "Version: " << ev.device_id().Version << "\n";
+	std::cout << "Driver version: " << ev.driver_version() << "\n";
 
-	ev.Grab();
+	ev.grab();
 
 	while (true) {
-		auto ie = ev.Read();
+		auto ie = ev.read();
 
 		std::cout << "Event type: " << ie.Type << "\n";
 		std::cout << "Event code: " << ie.Code << "\n";

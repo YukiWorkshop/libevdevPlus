@@ -1,6 +1,6 @@
 /*
     This file is part of libevdevPlus.
-    Copyright (C) 2018 YukiWorkshop
+    Copyright (C) 2018-2021 Reimu NotMoe <reimu@sudomaker.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the MIT License.
@@ -15,81 +15,61 @@
 using namespace evdevPlus;
 
 
-void EventDevice::Open(const std::string &path, int open_flags) {
+void EventDevice::__open(const std::string &path, int open_flags) {
 	int fd = open(path.c_str(), open_flags);
 
 	if (fd < 0)
-		throw std::runtime_error("failed to open device: " + std::string(strerror(errno)));
+		throw std::system_error(errno, std::system_category(), "failed to open device");
 
-	Open(fd);
+	path_ = path;
+
 }
 
-void EventDevice::Open(int fd) {
-	if (!IsValidDevice(fd))
-		throw std::runtime_error("not a valid event device");
-
-	FD = fd;
-
-	Init();
+void EventDevice::__close() {
+	if (fd_ != -1)
+		close(fd_);
 }
 
-void EventDevice::Close() {
-	if (FD != -1)
-		close(FD);
-}
 
-bool EventDevice::IsValidDevice(int fd) {
-	if (fcntl(fd, F_GETFD) == -1)
-		return false;
+void EventDevice::__init() {
+	if (ioctl(fd_, EVIOCGVERSION, &DriverVersion))
+		throw std::system_error(errno, std::system_category(), "EVIOCGVERSION");
 
-	int _;
-
-	return ioctl(fd, EVIOCGVERSION, &_) == 0;
-}
-
-bool EventDevice::IsValidDevice() {
-	return IsValidDevice(FD);
-}
-
-void EventDevice::Init() {
-	if (ioctl(FD, EVIOCGVERSION, &DriverVersion))
-		throw std::runtime_error(std::string("EVIOCGVERSION") + " failed");
-
-	if (ioctl(FD, EVIOCGID, &(DeviceID.inputId)))
-		throw std::runtime_error(std::string("EVIOCGID") + " failed");
+	if (ioctl(fd_, EVIOCGID, &(DeviceID.inputId)))
+		throw std::system_error(errno, std::system_category(), "EVIOCGID");
 
 	char name[256] = "Unknown";
-	ioctl(FD, EVIOCGNAME(sizeof(name)), name);
+	ioctl(fd_, EVIOCGNAME(sizeof(name)), name);
 	DeviceName = name;
 
 
 	long evtypes;
-	if (ioctl(FD, EVIOCGBIT(0, sizeof(long)), &evtypes) == -1)
-		throw std::runtime_error(std::string("EVIOCGBIT") + " failed");
+	if (ioctl(fd_, EVIOCGBIT(0, sizeof(long)), &evtypes) == -1)
+		throw std::system_error(errno, std::system_category(), "EVIOCGBIT");
 
 	// TODO
 }
 
-void EventDevice::Grab() {
-	if (ioctl(FD, EVIOCGRAB, 1))
-		throw std::runtime_error(std::string("EVIOCGRAB") + "failed");
+void EventDevice::grab() {
+	if (ioctl(fd_, EVIOCGRAB, 1))
+		throw std::system_error(errno, std::system_category(), "EVIOCGRAB");
 }
 
-void EventDevice::Ungrab() {
-	if (ioctl(FD, EVIOCGRAB, 0))
-		throw std::runtime_error(std::string("EVIOCGRAB") + "failed");
+void EventDevice::ungrab() {
+	if (ioctl(fd_, EVIOCGRAB, 0))
+		throw std::system_error(errno, std::system_category(), "EVIOCGRAB");
 }
 
-InputEvent EventDevice::Read() {
+InputEvent EventDevice::read() {
 	InputEvent ret;
 
-	ssize_t rc = read(FD, &ret.event, sizeof(input_event));
+	ssize_t rc = ::read(fd_, &ret.event, sizeof(input_event));
 
 	if (rc != sizeof(input_event)) {
 		if (rc < 0)
-			throw std::runtime_error(strerror(errno));
+			throw std::system_error(errno, std::system_category(), "read");
 		else
-			throw std::runtime_error("truncated read");
+			throw std::system_error(errno, std::system_category(), "truncated read");
 	}
 
 	return ret;

@@ -1,6 +1,6 @@
 /*
     This file is part of libevdevPlus.
-    Copyright (C) 2018 YukiWorkshop
+    Copyright (C) 2018-2021 Reimu NotMoe <reimu@sudomaker.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the MIT License.
@@ -10,8 +10,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef LIBEVDEVPLUS_INPUTEVENT_HPP
-#define LIBEVDEVPLUS_INPUTEVENT_HPP
+#pragma once
 
 #include "CommonIncludes.hpp"
 
@@ -62,4 +61,3 @@ namespace evdevPlus {
 	};
 
 }
-#endif //LIBEVDEVPLUS_INPUTEVENT_HPP
