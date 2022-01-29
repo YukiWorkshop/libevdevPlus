@@ -22,7 +22,7 @@ void EventDevice::__open(const std::string &path, int open_flags) {
 		throw std::system_error(errno, std::system_category(), "failed to open device");
 
 	path_ = path;
-
+  fd_ = fd;
 }
 
 void EventDevice::__close() {
